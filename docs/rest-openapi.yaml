@@ -176,3 +176,80 @@ paths:
             curl -X POST "http://localhost:4000/pokemon/information" \
             -H "Content-Type: application/json" \
             --data '{"pokemonName": "pikachu"}'
+
+  /pokemon/mix:
+    post:
+      summary: Mix pokemon
+      description: |
+        Generate image mix of two pokemon
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                mixOperation:
+                  type: string
+      responses:
+        '200':
+          description: Success generate mix pokemon
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success]
+                  message:
+                    type: 'null'
+                  data:
+                    type: object
+                    properties:
+                      imageURL:
+                        type: string
+                      notFound:
+                        type: string
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [failed]
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        enum: [invalid-value]
+                      message:
+                        type: string
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [failed]
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        enum: [internal-error]
+                      message:
+                        type: string
+      x-codeSamples:
+        - lang: curl
+          source: |
+            curl -X POST "http://localhost:4000/pokemon/mix" \
+            -H "Content-Type: application/json" \
+            --data '{"mixOperation": "pikachu + giratina"}'
