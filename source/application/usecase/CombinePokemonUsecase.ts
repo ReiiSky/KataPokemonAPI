@@ -28,7 +28,7 @@ export class CombinePokemonUsecase {
 
     if (!isFirstExist) {
       return {
-        imageURL: null,
+        imageURL: '',
         notFound: first,
       };
     }
@@ -38,7 +38,7 @@ export class CombinePokemonUsecase {
 
     if (!isSecondExist) {
       return {
-        imageURL: null,
+        imageURL: '',
         notFound: second,
       };
     }
@@ -61,7 +61,7 @@ export class CombinePokemonUsecase {
 
     return {
       imageURL: storageResult.url,
-      notFound: null,
+      notFound: '',
     };
   }
 
