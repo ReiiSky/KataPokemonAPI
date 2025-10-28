@@ -79,14 +79,6 @@ export class REST {
     const accessKey = config.getString('S3_ACCESS_KEY');
     const secretKey = config.getString('S3_SECRET_KEY');
 
-    const options = [accessKey, secretKey, bucket, endpoint];
-
-    for (const option of options) {
-      if (option.isNone) {
-        throw new InvalidConfig('S3 configuration', 'undefined');
-      }
-    }
-
     return {
       endpoint: endpoint.yolo(),
       bucket: bucket.yolo(),
