@@ -1,0 +1,35 @@
+openapi: 3.1.0
+
+servers:
+  - url: http://localhost:3000
+    description: Local Server
+
+info:
+  title: Backend for Kata Pokemon API
+  version: 1.0.0
+
+paths:
+  /health:
+    get:
+      tags:
+        - System
+      summary: Health Check
+      description: Endpoint to check if the API is up and running.
+      operationId: healthCheck
+      responses:
+        '200':
+          description: API is healthy and running properly.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success]
+                    description: Status of the API health
+                  data:
+                    type: object
+                    properties: {}
+
+  

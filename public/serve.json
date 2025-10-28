@@ -1,0 +1,7 @@
+{
+  "public": "./",
+  "cleanUrls": true,
+  "directoryListing": false,
+  "renderSingle": true,
+  "unlisted": ["serve.json"]
+}

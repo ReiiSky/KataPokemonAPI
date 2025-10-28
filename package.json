@@ -1,0 +1,91 @@
+{
+  "name": "kata-pokemon-backend",
+  "version": "0.0.0",
+  "description": "Kata backend for pokemon API",
+  "files": [
+    "build/source"
+  ],
+  "keywords": [],
+  "scripts": {
+    "dev-bun": "bun source/RunRest.ts",
+    "dev": "npm-watch dev-bun",
+    "run:rest": "node build/source/RunRest.js",
+    "docs:rest-build": "redocly build-docs docs/rest-openapi.yaml --title \"Kata Pokemon Rest API\" --output \"public/index.html\"",
+    "docs:rest": "npm run docs:rest-build && serve -p 3001 public",
+    "watch:docs:rest": "npm-watch docs:rest",
+    "format": "npm run fix",
+    "watch:format": "npm-watch format",
+    "test": "jest",
+    "lint": "biome lint --write",
+    "clean": "biome clean && rm -rf build",
+    "compile": "tsc --project tsconfig.json && tsc-alias && tscpaths -p tsconfig.json -s ./source -o ./build",
+    "fix": "biome format --write",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "watch": {
+    "docs:rest": {
+      "patterns": [
+        "docs"
+      ],
+      "extensions": "yaml",
+      "delay": 0,
+      "runOnChangeOnly": false,
+      "quiet": false
+    },
+    "format": {
+      "patterns": [
+        "source",
+        "test"
+      ],
+      "extensions": "ts",
+      "delay": 0,
+      "runOnChangeOnly": false,
+      "quiet": true
+    },
+    "dev-bun": {
+      "patterns": [
+        "source",
+        "test",
+        ".env"
+      ],
+      "extensions": "ts",
+      "delay": 0,
+      "runOnChangeOnly": false,
+      "quiet": true
+    }
+  },
+  "devDependencies": {
+    "@baemingo/tscpaths-async": "^0.0.15",
+    "@biomejs/biome": "^1.8.3",
+    "@redocly/cli": "^1.25.4",
+    "@types/jest": "^29.5.12",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/koa": "^2.15.0",
+    "@types/koa-bodyparser": "^4.3.12",
+    "@types/koa-router": "^7.4.8",
+    "@types/node": "^22.7.4",
+    "@types/node-fetch": "^2.6.11",
+    "@types/postmark": "^2.0.3",
+    "@types/supertest": "^6.0.2",
+    "jest": "^29.7.0",
+    "npm-watch": "^0.13.0",
+    "ts-jest": "^29.2.3",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "typescript": "~5.1.6"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.864.0",
+    "@aws-sdk/s3-request-presigner": "^3.864.0",
+    "@koa/cors": "^5.0.0",
+    "@prisma/client": "^6.3.1",
+    "joi": "^17.13.3",
+    "koa": "^2.15.3",
+    "koa-body": "^6.0.1",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^13.0.1",
+    "prisma": "^6.3.1"
+  }
+}
