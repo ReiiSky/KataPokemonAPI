@@ -7,8 +7,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Credential {
+model Users {
   id        Int      @id @default(autoincrement())
   name      String
   createdAt DateTime @default(now())
 }
+
+// TODO: Pokemon (cache pokemon data)
+// TODO: log message in/out(bound)
+// TODO: log image generation task
