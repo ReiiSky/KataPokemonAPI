@@ -159,4 +159,8 @@ export class REST {
       await lg.close();
     });
   }
+
+  public serverless() {
+    return this.koaAdapter.serverless();
+  }
 }

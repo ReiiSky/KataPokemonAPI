@@ -3,6 +3,7 @@ import Router from 'koa-router';
 import { koaBody } from 'koa-body';
 import cors from '@koa/cors';
 import { HTTPAdapterPayload } from 'interface/HTTPAdapterPayload';
+import serverlesskoa from 'aws-serverless-koa';
 
 export class KoaAdapters {
   private readonly instance: Koa<Koa.DefaultState, Koa.DefaultContext>;
@@ -53,5 +54,10 @@ export class KoaAdapters {
   public listen(onListen: (port: number) => void) {
     this.applyRoute();
     this.instance.listen(this.port, () => onListen(this.port));
+  }
+
+  public serverless() {
+    this.applyRoute();
+    return serverlesskoa(this.instance);
   }
 }

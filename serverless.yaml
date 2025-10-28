@@ -1,0 +1,32 @@
+service: serverless-http-api
+frameworkVersion: "4"
+
+provider:
+  name: aws
+  runtime: nodejs22.x
+
+package:
+  patterns:
+    - '!docs/**'
+    - '!prisma/**'
+    - '!README.md'
+    - '!public/**'
+    - '!source/**'
+  individually: true
+
+functions:
+  koa:
+    handler: build/source/Serverless.handler
+    events:
+      - http:
+          path: /health
+          method: get
+      - http:
+          path: /pokemon/information
+          method: post
+      - http:
+          path: /pokemon/mix
+          method: post
+
+plugins:
+  - serverless-offline
