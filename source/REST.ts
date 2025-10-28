@@ -21,6 +21,8 @@ import { LogCloser } from 'package/log/LogCloser';
 import { PGRegisterAccount } from 'infrastructure/implementation/PGRegisterAccount';
 import { RegisterAdaptor } from 'interface/koa/RegisterAdaptor';
 import { RegisterAccountController } from 'application/controller/RegisterAccountController';
+import { GetPokemonInformationAdaptor } from 'interface/koa/GetPokemonInformationAdaptor';
+import { GetPokemonInformationController } from 'application/controller/GetPokemonInformationController';
 
 export class REST {
   private readonly koaAdapter: KoaAdapters;
@@ -52,7 +54,10 @@ export class REST {
   private registerAdaptor() {
     this.koaAdapter
       .add(new HealthCheckAdaptor(new HealthCheckController()))
-      .add(new RegisterAdaptor(new RegisterAccountController()));
+      .add(new RegisterAdaptor(new RegisterAccountController()))
+      .add(
+        new GetPokemonInformationAdaptor(new GetPokemonInformationController())
+      );
   }
 
   private createServices(config: Config) {

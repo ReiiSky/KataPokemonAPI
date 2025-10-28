@@ -2,9 +2,11 @@ import { IStorage } from 'application/IStorage';
 import { S3 } from 'application/service/S3';
 import { ServiceConfig } from 'application/service/ServiceConfig';
 import { IContextControl } from 'infrastructure/IContextControl';
+import { PokeAPI } from 'application/service/PokeAPI';
 
 export class Services {
   private _storage: IStorage;
+  private _pokeapi: PokeAPI;
 
   constructor(
     private ctx: IContextControl,
@@ -19,5 +21,15 @@ export class Services {
     this._storage = new S3(this.ctx, this.config.s3);
 
     return this._storage;
+  }
+
+  public get pokeapi() {
+    if (this._pokeapi) {
+      return this._pokeapi;
+    }
+
+    this._pokeapi = new PokeAPI(this.ctx);
+
+    return this._pokeapi;
   }
 }

@@ -116,6 +116,8 @@ paths:
               properties:
                 pokemonName:
                   type: string
+                imageURL:
+                  type: string
       responses:
         '200':
           description: Success retrieve pokemon information
