@@ -1,5 +1,3 @@
-# Documenting Repository
-
 # Kata Pokemon API
 
 This codebase boilerplate is extracted from Daniel’s other project, for single purpose which is to complete kata.ai assignment. A lot of feature has been removed to simplify it. This API support serverless framework and koa http server as main interface. I’ve also include the bot.yaml for deploying flow of bot.
