@@ -32,4 +32,72 @@ paths:
                     type: object
                     properties: {}
 
-  
+  /account:
+    post:
+      summary: Register New User
+      description: |
+        Register New User to Database
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '200':
+          description: User register succeeded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [success]
+                  message:
+                    type: 'null'
+        '400':
+          description: Invalid input.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [failed]
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        enum: [invalid-value]
+                      message:
+                        type: string
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [failed]
+                  error:
+                    type: object
+                    properties:
+                      code:
+                        type: string
+                        enum: [internal-error]
+                      message:
+                        type: string
+      x-codeSamples:
+        - lang: curl
+          source: |
+            curl -X POST "http://localhost:4000/account" \
+            -H "Content-Type: application/json" \
+            --data '{"name": "Bambang"}'  
