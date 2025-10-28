@@ -1,0 +1,445 @@
+name: DanielsPokemon
+tag: latest
+deleted_at: null
+desc: ''
+timezone: 7
+flows:
+    PokemonFlow:
+        active: true
+        volatile: true
+        intents:
+            GreetingIntent:
+                type: text
+                initial: true
+                fallback: false
+                classifier:
+                    nlu: Greeting
+            nonSNLinputName:
+                type: text
+                initial: false
+                fallback: false
+                classifier:
+                    nlu: nonSupermodel
+                    hint: 'Contoh: Andi'
+            findPokemonIntent:
+                type: text
+                initial: true
+                fallback: false
+                classifier:
+                    nlu: findPokemondCommand
+                    match: ''
+            pokemonNameIntent:
+                type: text
+                initial: false
+                fallback: false
+                classifier:
+                    nlu: pokemonName
+            pokemonInfoResultIntent:
+                type: command
+                initial: true
+                fallback: false
+                condition: content == "pokemonInfoResult"
+            cancelIntent:
+                type: text
+                initial: true
+                fallback: false
+                condition: content == "cancel"
+            mixIntent:
+                type: text
+                initial: true
+                fallback: false
+                classifier:
+                    nlu: pokemonMix
+                    match: Comb
+            pokemonMixParameterIntent:
+                type: text
+                initial: false
+                fallback: false
+                classifier:
+                    nlu: pokemonMixParameter
+            pokemonMixResultIntent:
+                type: command
+                initial: true
+                fallback: false
+                condition: content == "pokemonMixResult"
+        states:
+            Initialize:
+                transitions:
+                    GreetingWithName:
+                        condition: intent == "GreetingIntent"
+                initial: true
+            End:
+                transitions: {}
+                action: endAction
+                float:
+                    condition: intent == "cancelIntent"
+                end: true
+            GreetingWithName:
+                transitions:
+                    pokemonCommand:
+                        condition: intent == "nonSNLinputName"
+                        mapping:
+                            context.name: content
+                    invalidInput: {}
+                action: GreetingAction
+            pokemonCommand:
+                transitions:
+                    pokemonFindAsk:
+                        condition: intent == "findPokemonIntent" || content == "Cari"
+                    pokemonMixAsk:
+                        condition: intent == "mixIntent" || content == "Mix"
+                    invalidInput: {}
+                action:
+                    -
+                        name: updateNameResponse
+                    -
+                        name: pokemonCmdHelp
+                    -
+                        name: cancel
+                    -
+                        name: writeNameRender
+            pokemonFindAsk:
+                transitions:
+                    pokemonExist:
+                        condition: intent == "pokemonNameIntent"
+                        mapping:
+                            context.pokemonName: content
+                    invalidInput: {}
+                action:
+                    -
+                        name: pokemonFindQ
+                    -
+                        name: pokemonFindQDetail
+                float:
+                    condition: intent == "findPokemonIntent"
+            pokemonExist:
+                transitions: {}
+                action:
+                    -
+                        name: getPokemonRender
+                    -
+                        name: NotifyPokemonAPIResponse
+                enter:
+                    payload.text: '"Hello"'
+                end: true
+            pokemonInfoResultState:
+                transitions: {}
+                action:
+                    -
+                        name: pokemonInfoResult
+                    -
+                        name: pokemonImage
+                float:
+                    condition: content == "pokemonInfoResult"
+                end: true
+            invalidInput:
+                transitions: {}
+                action: invalidInput
+                end: true
+            pokemonMixAsk:
+                transitions:
+                    pokemonMix:
+                        condition: intent == "pokemonMixParameterIntent"
+                    invalidInput: {}
+                action: pokemonMixinfo
+                float:
+                    condition: intent == "mixIntent"
+            pokemonMix:
+                transitions: {}
+                action:
+                    -
+                        name: inProgressMix
+                    -
+                        name: pokemonMixAction
+                    -
+                        name: pokemonMixCommand
+                end: true
+            pokemonMixResultState:
+                transitions: {}
+                action:
+                    -
+                        name: pokemonMixImageAlt
+                        condition: payload.result.data.notFound != ""
+                    -
+                        name: pokemonMixResultAltCond
+                        condition: payload.result.data.imageURL != ""
+                    -
+                        name: pokemonMixResultImage
+                        condition: payload.result.data.imageURL != ""
+                float:
+                    condition: content == "pokemonMixResult"
+                end: true
+        actions:
+            endAction:
+                type: text
+                options:
+                    text: Selamat tinggal.
+            GreetingAction:
+                type: text
+                options:
+                    text: Halo siapa nama kamu?
+            updateNameResponse:
+                type: text
+                options:
+                    text: Selamat datang $(context.name)!!
+            stop:
+                type: text
+                options:
+                    text: STOPPP
+            pokemonCmdHelp:
+                type: text
+                options:
+                    text: Gunakan perintah "Cari" untuk mencari pokemon atau perintah "Mix" untuk menggabungkan kedua pokemon.
+            pokemonFindQ:
+                type: text
+                options:
+                    text: Apa nama pokemon yang kamu ingin ketahui?
+            unknownPokemon:
+                type: text
+                options:
+                    text: Maaf sepertinya kita tidak menemukan pokemon bernama "$(context.pokemonName)"
+            pokemonInformation:
+                type: text
+                options:
+                    text: >-
+                        Berikut adalah informasi terkait pokemon $(context.pokemonName). Dengan berat .weight / 10 KG dan tinggi .height * 10 CM,
+                        $(context.pokemonName) menggunakan elemen: .types[].type.name. Berikut adalah gambar $(context.pokemonName):
+            pokemonFindQDetail:
+                type: text
+                options:
+                    text: 'Gunakan huruf kecil semua misalnya: pikachu'
+            retrieveGetPokemonAPI:
+                type: command
+                options:
+                    command: result
+                    payload:
+                        result: $(result)
+            getPokemonAPI:
+                type: api
+                options:
+                    uri: 'https://webhook.site/8818fee1-8569-4c02-8667-85871be6ddff'
+                    method: POST
+                    isAsync: false
+                    headers:
+                        App-Secret: Secret123
+                    form_data:
+                        pokemonName1: $(context.pokemonName)
+                        pokemonName2: context.pokemonName
+            logresult:
+                type: text
+                options:
+                    text: $(result)
+            logResult:
+                type: text
+                options:
+                    text: $(context)
+            pokemonExistAPI:
+                type: asyncApi
+                options:
+                    uri: 'https://webhook.site/8818fee1-8569-4c02-8667-85871be6ddff'
+                    method: POST
+                    body:
+                        -
+                            key: pokemonName
+                            value: $(content)
+                    headers: []
+                    command: apiResult
+                    isAsync: true
+            pokemonExistSyncAPI:
+                type: api
+                options:
+                    uri: 'https://webhook.site/8818fee1-8569-4c02-8667-85871be6ddff'
+                    method: POST
+                    isAsync: false
+                    body:
+                        pokemonName: $(content)
+            apiResult:
+                type: text
+                options:
+                    text: $(payload.status)
+            pokemonExist:
+                type: api
+                options:
+                    uri: 'https://webhook.site/8818fee1-8569-4c02-8667-85871be6ddff'
+                    method: POST
+                    body:
+                        pokemonName: $(content)
+            log2:
+                type: text
+                options:
+                    text:
+                        - $(payload.result)
+                        - $(result)
+                        - $(context.result)
+            callping:
+                type: command
+                options:
+                    command: ping
+            pokemonExist2:
+                type: api
+                options:
+                    uri: 'https://webhook.site/8818fee1-8569-4c02-8667-85871be6ddff'
+                    method: POST
+                    body:
+                        pokemonName: $(content)
+            pokemonInfoResult:
+                type: text
+                options:
+                    text: $(payload.result.data.information)
+            invalidInput:
+                type: text
+                options:
+                    text: Maaf input kamu kurang tepat.
+            pokemonMixinfo:
+                type: text
+                options:
+                    text: 'Berikan dua jenis pokemon yang ingin kamu masukan. misalnya: pikachu + giratina'
+            inProgressMix:
+                type: text
+                options:
+                    text: Penggabungan pokemon sedang berjalan...
+            cancel:
+                type: text
+                options:
+                    text: Gunakan "cancel" untuk mengulang percakapan.
+            writeName:
+                type: api
+                options:
+                    uri: 'https://webhook.site/8818fee1-8569-4c02-8667-85871be6ddff'
+                    method: POST
+                    isAsync: false
+                    body:
+                        name: $(context.name)
+            writeNameRender:
+                type: api
+                options:
+                    uri: 'https://katapokemonapi.onrender.com/account'
+                    method: POST
+                    body:
+                        name: $(context.name)
+            getPokemonRender:
+                type: api
+                options:
+                    uri: 'https://katapokemonapi.onrender.com/pokemon/information'
+                    method: POST
+                    isAsync: false
+                    body:
+                        pokemonName: $(content)
+            NotifyPokemonAPIResponse:
+                type: command
+                options:
+                    command: pokemonInfoResult
+                    payload:
+                        result: $(result)
+            pokemonImage:
+                type: template
+                options:
+                    type: image
+                    items:
+                        originalContentUrl: $(payload.result.data.imageURL)
+                        previewImageUrl: $(payload.result.data.imageURL)
+            pokemonMixAction:
+                type: api
+                options:
+                    uri: 'https://katapokemonapi.onrender.com/pokemon/mix'
+                    method: POST
+                    isAsync: false
+                    body:
+                        mixOperation: $(content)
+            pokemonMixCommand:
+                type: command
+                options:
+                    command: pokemonMixResult
+                    payload:
+                        result: $(result)
+            pokemonMixAlt:
+                type: text
+                options:
+                    text: 'Jika tidak ada gambar yang muncul, silahkan buka link berikut: $(payload.result.data.imageURL)'
+            notFound:
+                type: text
+                options:
+                    text: 'Pokemon tidak ditemukan: $(payload.result.data.notFound)'
+            pokemonMixResultImage2:
+                type: template
+                options:
+                    type: image
+                    items:
+                        originalContentUrl: $(payload.result.data.imageURL)
+                        previewImageUrl: $(payload.result.data.imageURL)
+            pokemonMixImageAlt:
+                type: text
+                options:
+                    text: 'Pokemon tidak ditemukan: $(payload.result.data.notFound)'
+            pokemonMixResultAltCond:
+                type: text
+                options:
+                    text: 'Jika gambar tidak muncul, silahkan buka link berikut: $(payload.result.data.imageURL)'
+            pokemonMixResultAltCondAlt:
+                type: text
+                options:
+                    text: '2. Jika gambar tidak muncul, silahkan buka link berikut: $(payload.result.data.imageURL)'
+            pokemonMixResultImage:
+                type: template
+                options:
+                    type: image
+                    items:
+                        originalContentUrl: $(payload.result.data.imageURL)
+                        previewImageUrl: $(payload.result.data.imageURL)
+        methods: {}
+nlus:
+    supermodel:
+        type: nl
+        options:
+            nluId: 'Entalizen:DanielsPokemon'
+            threshold: 0
+            output: phrase
+            entity: kata
+            asIntent: person
+    Greeting:
+        type: keyword
+        options:
+            keywords:
+                Halo:
+                    - halo
+                    - hai
+                    - hallo
+                    - hi
+                    - p
+                    - /start
+            exact: true
+    nonSupermodel:
+        type: regex
+        options:
+            regex: '^[A-Z][a-z]+$'
+    findPokemondCommand:
+        type: keyword
+        options:
+            keywords:
+                Search:
+                    - Cari
+                    - cari
+                    - cariin
+                    - mana
+            exact: true
+    pokemonName:
+        type: regex
+        options:
+            regex: '^[a-z]+$'
+    pokemonMix:
+        type: keyword
+        options:
+            keywords:
+                Comb:
+                    - Mix
+                    - mix
+                    - gabung
+                    - campur
+                    - combine
+            exact: true
+    pokemonMixParameter:
+        type: regex
+        options:
+            regex: '^[a-z]+\s+\+\s+[a-z]+$'
+methods: {}
+config: {}
