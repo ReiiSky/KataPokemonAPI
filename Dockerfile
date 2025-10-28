@@ -10,7 +10,6 @@ COPY . ./
 RUN npx prisma generate
 
 RUN export DATABASE_URL=${DATABASE_URL}
-RUN npx prisma generate --sql
 
 RUN npm run compile
 # RUN npx ncc build --out dist \
@@ -31,13 +30,8 @@ RUN npm install --ignore-scripts --omit dev
 COPY prisma .
 RUN npx prisma generate
 
-# # CURL
-# RUN apk add --no-cache curl
-
 RUN export DATABASE_URL=${DATABASE_URL}
-RUN npx prisma generate --sql
 
 COPY --from=build /app/build /app/runable/build
-# COPY --from=build /app/dist /app/runable/dist
 
 CMD ["npm", "run", "run:rest"]
