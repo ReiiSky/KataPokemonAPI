@@ -32,9 +32,9 @@ export class GetPokemonInformationUsecase {
           `Dengan berat ${p.weight / 10} KG dan tinggi ${p.height * 10} CM, ${p.name} menggunakan elemen: ${p.types
             .slice(0, 3)
             .map(t => StringConverter.toExternal(t.type.name))
-            .join(', ')}.`,
-          `Statistik ${p.stats.map(s => `${s.stat.name}: ${s.base_stat}`).join(', ')}.`,
-          `Kemampuannya adalah sebagai berikut: ${p.abilities.map(a => StringConverter.toExternal(a.ability.name)).join(', ')}.`,
+            .join(', ')}.\n`,
+          `Statistik ${p.stats.map(s => `${s.stat.name}: ${s.base_stat}`).join(', ')}.\n`,
+          `Kemampuannya adalah sebagai berikut: ${p.abilities.map(a => StringConverter.toExternal(a.ability.name)).join(', ')}.\n`,
           'Berikut adalah gambarnya:',
         ].join('\n'),
       }))
