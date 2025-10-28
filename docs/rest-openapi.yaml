@@ -47,7 +47,7 @@ paths:
                 name:
                   type: string
       responses:
-        '200':
+        '201':
           description: User register succeeded
           content:
             application/json:

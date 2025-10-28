@@ -18,6 +18,9 @@ import { Logger } from 'package/log/Logger';
 import { ConsoleLogger } from 'package/log/ConsoleLogger';
 import { LogGroup } from 'package/log/LogGroup';
 import { LogCloser } from 'package/log/LogCloser';
+import { PGRegisterAccount } from 'infrastructure/implementation/PGRegisterAccount';
+import { RegisterAdaptor } from 'interface/koa/RegisterAdaptor';
+import { RegisterAccountController } from 'application/controller/RegisterAccountController';
 
 export class REST {
   private readonly koaAdapter: KoaAdapters;
@@ -47,7 +50,9 @@ export class REST {
   }
 
   private registerAdaptor() {
-    this.koaAdapter.add(new HealthCheckAdaptor(new HealthCheckController()));
+    this.koaAdapter
+      .add(new HealthCheckAdaptor(new HealthCheckController()))
+      .add(new RegisterAdaptor(new RegisterAccountController()));
   }
 
   private createServices(config: Config) {
@@ -115,7 +120,7 @@ export class REST {
     logCollectorFn: () => LogGroup & LogCloser
   ) {
     const registrator = new RepositoriesRegistrator()
-      // .addEvent(new PGCreateAccount())
+      .addEvent(new PGRegisterAccount())
       .scope(Scope.Account)
       .addSpecification(new EmptyAccount());
 

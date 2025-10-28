@@ -5,8 +5,12 @@ import { Identifier } from 'domain/object/Identifier';
 export class Credential extends Entity {
   constructor(
     identifer: Identifier,
-    public readonly value: CredentialObject
+    private readonly value: CredentialObject
   ) {
     super(identifer);
+  }
+
+  public get name() {
+    return this.value.name;
   }
 }

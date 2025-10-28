@@ -8,7 +8,7 @@ export class EmptyAccount {
   query(): Promise<Aggregate[]> {
     const accountAggr = new Account(
       new Credential(Identifier.newNone(), {
-        name: 'test',
+        name: '',
       })
     );
 
