@@ -3,10 +3,12 @@ import { S3 } from 'application/service/S3';
 import { ServiceConfig } from 'application/service/ServiceConfig';
 import { IContextControl } from 'infrastructure/IContextControl';
 import { PokeAPI } from 'application/service/PokeAPI';
+import { OpenRouter } from 'application/service/OpenRouter';
 
 export class Services {
   private _storage: IStorage;
   private _pokeapi: PokeAPI;
+  private _openrouter: OpenRouter;
 
   constructor(
     private ctx: IContextControl,
@@ -31,5 +33,18 @@ export class Services {
     this._pokeapi = new PokeAPI(this.ctx);
 
     return this._pokeapi;
+  }
+
+  public get openrouter() {
+    if (this._openrouter) {
+      return this._openrouter;
+    }
+
+    this._openrouter = new OpenRouter(
+      this.ctx,
+      this.config.openrouterAPISecret
+    );
+
+    return this._openrouter;
   }
 }

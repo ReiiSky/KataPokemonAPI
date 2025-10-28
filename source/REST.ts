@@ -23,6 +23,8 @@ import { RegisterAdaptor } from 'interface/koa/RegisterAdaptor';
 import { RegisterAccountController } from 'application/controller/RegisterAccountController';
 import { GetPokemonInformationAdaptor } from 'interface/koa/GetPokemonInformationAdaptor';
 import { GetPokemonInformationController } from 'application/controller/GetPokemonInformationController';
+import { CombinePokemonAdaptor } from 'interface/koa/CombinePokemonAdaptor';
+import { CombinePokemonController } from 'application/controller/CombinePokemonController';
 
 export class REST {
   private readonly koaAdapter: KoaAdapters;
@@ -57,14 +59,21 @@ export class REST {
       .add(new RegisterAdaptor(new RegisterAccountController()))
       .add(
         new GetPokemonInformationAdaptor(new GetPokemonInformationController())
-      );
+      )
+      .add(new CombinePokemonAdaptor(new CombinePokemonController()));
   }
 
   private createServices(config: Config) {
     const s3config = this.getS3Config(config);
+    const openrouterAPISecretOpt = config.getString('OPENROUTER_API_SECRET');
+
+    if (openrouterAPISecretOpt.isNone) {
+      throw new InvalidConfig('OpenRouter configuration', 'undefined');
+    }
 
     return new ServiceContainer({
       s3: s3config,
+      openrouterAPISecret: openrouterAPISecretOpt.yolo(),
     });
   }
 
