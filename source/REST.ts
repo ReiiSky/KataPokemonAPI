@@ -67,13 +67,9 @@ export class REST {
     const s3config = this.getS3Config(config);
     const openrouterAPISecretOpt = config.getString('OPENROUTER_API_SECRET');
 
-    if (openrouterAPISecretOpt.isNone) {
-      throw new InvalidConfig('OpenRouter configuration', 'undefined');
-    }
-
     return new ServiceContainer({
       s3: s3config,
-      openrouterAPISecret: openrouterAPISecretOpt.yolo(),
+      openrouterAPISecret: openrouterAPISecretOpt.unwrap('-'),
     });
   }
 
