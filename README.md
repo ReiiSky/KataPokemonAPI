@@ -11,6 +11,16 @@ There’s todo feature i can afford to develop due to time constraint:
 - Log image generation task
 - Top 3 pokemon for each categories
 
+## Table of Contents
+- [Features](#features)
+- [Configuration](#configuration)
+  - [Acquire Configuration](#acquire-configuration)
+    - [PostgreSQL](#postgresql)
+    - [AWS S3](#aws-s3)
+    - [OpenRouter](#openrouter)
+- [Setup](#setup)
+- [Running Script](#running-script)
+
 ## Features
 
 - Register new user - The feature will log the user name to database, including conversation initiation time.
@@ -80,16 +90,16 @@ then put it to config .env file
 
 > Make sure you already have the configuration variable ready.
 
-    - Clone the source - `https://github.com/ReiiSky/KataPokemonAPI `
-    - Install the module - `npm install`
+- Clone the source - `https://github.com/ReiiSky/KataPokemonAPI `
+- Install the module - `npm install`
 
 ![Image.png](https://resv2.craft.do/user/full/efbd129d-cd95-4fee-c221-d5812178c5ea/doc/DCF651A3-C43D-46A9-9943-E6176C41D95B/0F389858-0C46-46FE-860B-8232162C3749_2/8UMQRkIANVhimAr3JMqyM4F2jvQwDZLvSrChLxwgus8z/Image.png)
 
-    - Push the database schema `npx prisma migrate deploy` or `prisma migrate deploy`  
+- Push the database schema `npx prisma migrate deploy` or `prisma migrate deploy`  
 
 ![Image.png](https://resv2.craft.do/user/full/efbd129d-cd95-4fee-c221-d5812178c5ea/doc/DCF651A3-C43D-46A9-9943-E6176C41D95B/F6B8BAA6-9443-4924-9BBF-9428A6431D2F_2/zUxJeWRxpOiGUtUNiVYFR1EQZMdfiYW1Wkgbhiy6FoEz/Image.png)
 
-    - Generate prisma types - `npx prisma generate` or `prisma generate`
+- Generate prisma types - `npx prisma generate` or `prisma generate`
 
 ![Image.png](https://resv2.craft.do/user/full/efbd129d-cd95-4fee-c221-d5812178c5ea/doc/DCF651A3-C43D-46A9-9943-E6176C41D95B/DB0B685E-AA33-4C0C-A75A-790971D21AF6_2/iMtDbCHadn3QXcFfzRCLbkccBtzpEhTASXDYB7Pe7gkz/Image.png)
 
