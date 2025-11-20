@@ -15,6 +15,6 @@ export class Credential extends Entity {
   }
 
   public get phoneNumber() {
-    return this.phoneNumber;
+    return this.value.phoneNumber;
   }
 }
