@@ -13,4 +13,8 @@ export class Credential extends Entity {
   public get name() {
     return this.value.name;
   }
+
+  public get phoneNumber() {
+    return this.phoneNumber;
+  }
 }

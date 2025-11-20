@@ -22,6 +22,10 @@ export class RegisterAccountController extends BaseController<
     this.registerSchema = joi
       .object({
         name: joi.string().alphanum().required(),
+        phoneNumber: joi
+          .string()
+          .regex(/[0-9]{8,16}/)
+          .required(),
       })
       .options({
         cache: true,

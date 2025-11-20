@@ -14,9 +14,19 @@ export class PGRegisterAccount {
     const event = eventResult.child as RegisterAccount;
 
     prismaConn.addOperation(eventResult, () =>
-      prismaConn.C.users.create({
-        data: {
+      prismaConn.C.users.upsert({
+        create: {
           name: event.account.name,
+          phoneNumber: event.account.phoneNumber,
+          deleted: false,
+        },
+        update: {
+          name: event.account.name,
+          phoneNumber: event.account.phoneNumber,
+          deleted: false,
+        },
+        where: {
+          phoneNumber: event.account.phoneNumber,
         },
         select: {
           id: true,

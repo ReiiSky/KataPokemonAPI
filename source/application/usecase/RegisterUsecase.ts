@@ -15,7 +15,7 @@ export class RegisterUsecase {
     const payload = req.payload.yolo();
     const account = accountAggr.yolo();
 
-    account.register(payload.name);
+    account.register(payload.name, payload.phoneNumber);
 
     await ctx.repositories().save(account);
   }

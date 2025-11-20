@@ -9,6 +9,7 @@ export class EmptyAccount {
     const accountAggr = new Account(
       new Credential(Identifier.newNone(), {
         name: '',
+        phoneNumber: '',
       })
     );
 

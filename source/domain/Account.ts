@@ -4,11 +4,12 @@ import { Identifier } from 'domain/object/Identifier';
 import { RegisterAccount } from 'domain/event/RegisterAccount';
 
 export class Account extends Aggregate<number, Credential> {
-  public register(name: string) {
+  public register(name: string, phoneNumber: string) {
     this.addEvent(
       new RegisterAccount(
         new Credential(Identifier.newNone(), {
-          name: name,
+          name,
+          phoneNumber,
         })
       )
     );
