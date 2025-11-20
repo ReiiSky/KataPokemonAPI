@@ -19,10 +19,10 @@ export class ResetAccountAdaptor extends BaseKoaAdapter<ResetAccountInput> {
   }
 
   public get route(): string {
-    return '/account';
+    return '/account/reset';
   }
 
   public get method() {
-    return 'PUT';
+    return 'POST';
   }
 }
