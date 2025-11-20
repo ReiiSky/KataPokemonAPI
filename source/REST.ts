@@ -2,7 +2,6 @@ import { HealthCheckController } from 'application/controller/HealthCheckControl
 import { S3Config } from 'application/service/S3Config';
 import { ServiceContainer } from 'application/service/ServiceContainer';
 import { Scope } from 'domain/Scope';
-import { InvalidConfig } from 'error/InvalidConfig';
 import { ConnectionManagerBuilder } from 'infrastructure/ConnectionManagerBuilder';
 import { Kernel } from 'infrastructure/Kernel';
 import { RepositoriesRegistrator } from 'infrastructure/RepositoriesRegistrator';
@@ -25,6 +24,10 @@ import { GetPokemonInformationAdaptor } from 'interface/koa/GetPokemonInformatio
 import { GetPokemonInformationController } from 'application/controller/GetPokemonInformationController';
 import { CombinePokemonAdaptor } from 'interface/koa/CombinePokemonAdaptor';
 import { CombinePokemonController } from 'application/controller/CombinePokemonController';
+import { ResetAccountAdaptor } from 'interface/koa/ResetAccountAdaptor';
+import { ResetAccountController } from 'application/controller/ResetAccountController';
+import { PGAccountGetByPhoneNumber } from 'infrastructure/implementation/PGAccountGetByPhoneNumber';
+import { PGResetAccount } from 'infrastructure/implementation/PGResetAccount';
 
 export class REST {
   private readonly koaAdapter: KoaAdapters;
@@ -60,7 +63,8 @@ export class REST {
       .add(
         new GetPokemonInformationAdaptor(new GetPokemonInformationController())
       )
-      .add(new CombinePokemonAdaptor(new CombinePokemonController()));
+      .add(new CombinePokemonAdaptor(new CombinePokemonController()))
+      .add(new ResetAccountAdaptor(new ResetAccountController()));
   }
 
   private createServices(config: Config) {
@@ -123,8 +127,10 @@ export class REST {
   ) {
     const registrator = new RepositoriesRegistrator()
       .addEvent(new PGRegisterAccount())
+      .addEvent(new PGResetAccount())
       .scope(Scope.Account)
-      .addSpecification(new EmptyAccount());
+      .addSpecification(new EmptyAccount())
+      .addSpecification(new PGAccountGetByPhoneNumber());
 
     return Kernel.construct({
       connectionBuilder: connectionManagerBuilder,
