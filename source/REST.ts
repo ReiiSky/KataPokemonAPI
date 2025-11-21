@@ -28,6 +28,8 @@ import { ResetAccountAdaptor } from 'interface/koa/ResetAccountAdaptor';
 import { ResetAccountController } from 'application/controller/ResetAccountController';
 import { PGAccountGetByPhoneNumber } from 'infrastructure/implementation/PGAccountGetByPhoneNumber';
 import { PGResetAccount } from 'infrastructure/implementation/PGResetAccount';
+import { FindAccountAdaptor } from 'interface/koa/FindAccountAdaptor';
+import { FindAccountController } from 'application/controller/FindAccountController';
 
 export class REST {
   private readonly koaAdapter: KoaAdapters;
@@ -64,7 +66,8 @@ export class REST {
         new GetPokemonInformationAdaptor(new GetPokemonInformationController())
       )
       .add(new CombinePokemonAdaptor(new CombinePokemonController()))
-      .add(new ResetAccountAdaptor(new ResetAccountController()));
+      .add(new ResetAccountAdaptor(new ResetAccountController()))
+      .add(new FindAccountAdaptor(new FindAccountController()));
   }
 
   private createServices(config: Config) {

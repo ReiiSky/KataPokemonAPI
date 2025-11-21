@@ -24,4 +24,8 @@ export class Account extends Aggregate<number, Credential> {
 
     this.addEvent(new ResetAccount(this.id));
   }
+
+  public get name() {
+    return this.root.name;
+  }
 }

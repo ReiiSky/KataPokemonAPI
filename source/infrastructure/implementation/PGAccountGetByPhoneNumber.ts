@@ -22,6 +22,7 @@ export class PGAccountGetByPhoneNumber {
     const accountRow = await prismaConn.applyCtx(
       prismaConn.C.users.findFirst({
         where: {
+          deleted: false,
           phoneNumber: spec.phoneNumber,
         },
       })
